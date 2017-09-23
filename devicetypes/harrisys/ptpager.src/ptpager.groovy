@@ -27,7 +27,11 @@ def speak(toSay) {
     }
 
     if (toSay?.trim()) {
-        def command="&SPEAK="+toSay+"&"+getDoneString()
+        def command="&SPEAK="+toSay
         return transmit(command)
     }
+}
+
+private transmit(commandString, sendToS3 = false) {
+    log.info "Sending command "+ commandString+" to "+DeviceAddress+":"+DevicePort
 }
