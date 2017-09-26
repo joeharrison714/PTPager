@@ -14,7 +14,7 @@ metadata {
     }
 }
 
-String getVersion() {return "0.1";}
+String getVersion() {return "0.2";}
 
 /** speechSynthesis Capability: Speak
  */
@@ -39,8 +39,6 @@ private transmit(commandString, query) {
     log.info "Sending command "+ commandString+" to "+DeviceAddress+":"+DevicePort
     
     if (DeviceAddress?.trim()) {
-        def hosthex = convertIPtoHex(DeviceAddress)
-        def porthex = convertPortToHex(DevicePort)
         device.deviceNetworkId = "$hosthex:$porthex"
         log.info "deviceNetworkId: " + "$hosthex:$porthex"
         
@@ -70,21 +68,4 @@ def parse(description) {
     log.info headersAsString
     log.info status
     log.info body
-}
-
-private String convertIPtoHex(ipAddress) { 
-    String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02X', it.toInteger() ) }.join()
-    log.debug "IP address entered is $ipAddress and the converted hex code is $hex"
-    return hex
-
-}
-
-private String convertPortToHex(port) {
-    String hexport = port.toString().format( '%04X', port.toInteger() )
-    log.debug hexport
-    return hexport
-}
-
-void calledBackHandler(physicalgraph.device.HubResponse hubResponse) {
-    log.debug "Entered calledBackHandler()..."
 }
