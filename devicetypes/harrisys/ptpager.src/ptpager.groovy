@@ -5,7 +5,7 @@ metadata {
     preferences {
         input("DeviceAddress", "string", title:"PTPager IP Address", description:"IP address of the machine running PTPager", defaultValue:"" , required: true, displayDuringSetup: true)
         input("DevicePort", "string", title:"PTPager Port", description:"Port of the machine running PTPager", defaultValue:"5566", required: true, displayDuringSetup: true)
-        input("PagingChannel", "string", title:"PTPager Channel", description:"Channel to send pages on", defaultValue:"1", required: true, displayDuringSetup: true)
+        input("PagingChannel", "number", title:"PTPager Channel", description:"Channel to send pages on", defaultValue:"1", required: true, displayDuringSetup: true)
     }
     tiles {
         standardTile("speak", "device.speech", inactiveLabel: false, decoration: "flat") 
@@ -25,12 +25,15 @@ def speak(toSay) {
         
             toSay = "PTPager Version ${version}"
     }
+    log.info "To Say: " + toSay
+    log.info "Channel: " + PagingChannel
 
     if (toSay?.trim()) {
         def command="/speak"
         
         def query = [
-        	tosay: toSay
+        	tosay: toSay,
+            channel: PagingChannel
         ]
         return transmit(command, query)
     }
