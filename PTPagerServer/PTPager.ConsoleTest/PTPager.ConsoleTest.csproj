@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PTPager.Alerting.Interfaces\PTPager.Alerting.Interfaces.csproj" />
+    <ProjectReference Include="..\PTPager.Alerting.Model\PTPager.Alerting.Model.csproj" />
+    <ProjectReference Include="..\PTPager.Alerting.Polycom\PTPager.Alerting.Polycom.csproj" />
+    <ProjectReference Include="..\PTPager.Alerting.Services\PTPager.Alerting.Services.csproj" />
+    <ProjectReference Include="..\PTPager.Alerting.SystemSpeech\PTPager.Alerting.SystemSpeech.csproj" />
+  </ItemGroup>
+
+</Project>

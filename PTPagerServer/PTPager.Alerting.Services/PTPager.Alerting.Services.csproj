@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PTPager.Alerting.Interfaces\PTPager.Alerting.Interfaces.csproj" />
+    <ProjectReference Include="..\PTPager.Alerting.Model\PTPager.Alerting.Model.csproj" />
+  </ItemGroup>
+
+</Project>
