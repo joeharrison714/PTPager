@@ -17,6 +17,10 @@ namespace SystemSpeech
         {
             // convert text to audio stream using .net 3.x speechsynthesis g.711 u-law (pcm 64kb/s bit rate (u-law encodes 14-bit to 8-bit samples by adding 32 / binary 100000)
             var speaker = new SpeechSynthesizer();
+
+            // select male senior (if it exists)
+            speaker.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Adult);
+
             // can also change voice with SelectVoice method
             speaker.Rate = 1;
             // encoding format enums are Pcm, ALaw, ULaw

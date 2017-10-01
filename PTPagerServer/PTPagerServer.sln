@@ -9,17 +9,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.ConsoleTest", "PTPa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Alerting.Model", "PTPager.Alerting.Model\PTPager.Alerting.Model.csproj", "{04E1A3AC-ABEC-4C90-B69D-1512DA7CB0F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Alerting.Interfaces", "PTPager.Alerting.Interfaces\PTPager.Alerting.Interfaces.csproj", "{C45FF2CC-3C4B-4366-8222-6CE363A1A780}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Alerting.Interfaces", "PTPager.Alerting.Interfaces\PTPager.Alerting.Interfaces.csproj", "{C45FF2CC-3C4B-4366-8222-6CE363A1A780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Alerting.Polycom", "PTPager.Alerting.Polycom\PTPager.Alerting.Polycom.csproj", "{9ACA0652-20FC-47CF-A018-11807086DB41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Alerting.Polycom", "PTPager.Alerting.Polycom\PTPager.Alerting.Polycom.csproj", "{9ACA0652-20FC-47CF-A018-11807086DB41}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemSpeech", "SystemSpeech\SystemSpeech.csproj", "{78907D4E-A61F-4110-93E5-9EDA65082369}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Alerting.SystemSpeech", "PTPager.Alerting.SystemSpeech\PTPager.Alerting.SystemSpeech.csproj", "{5496D53A-02CB-41CA-99DD-321D053ECF5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Alerting.SystemSpeech", "PTPager.Alerting.SystemSpeech\PTPager.Alerting.SystemSpeech.csproj", "{5496D53A-02CB-41CA-99DD-321D053ECF5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Control", "PTPager.Control\PTPager.Control.csproj", "{C1FD16A7-46B7-4D78-8D57-A94C0F42A11E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Control", "PTPager.Control\PTPager.Control.csproj", "{C1FD16A7-46B7-4D78-8D57-A94C0F42A11E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Alerting.Services", "PTPager.Alerting.Services\PTPager.Alerting.Services.csproj", "{754DA42E-05F2-4394-996B-409E88CE191D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Alerting.Services", "PTPager.Alerting.Services\PTPager.Alerting.Services.csproj", "{754DA42E-05F2-4394-996B-409E88CE191D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Web2", "PTPager.Web2\PTPager.Web2.csproj", "{52350CC8-43E8-489D-93DD-0D8F553C9DBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{754DA42E-05F2-4394-996B-409E88CE191D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{754DA42E-05F2-4394-996B-409E88CE191D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{754DA42E-05F2-4394-996B-409E88CE191D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52350CC8-43E8-489D-93DD-0D8F553C9DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52350CC8-43E8-489D-93DD-0D8F553C9DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52350CC8-43E8-489D-93DD-0D8F553C9DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52350CC8-43E8-489D-93DD-0D8F553C9DBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
