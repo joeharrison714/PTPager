@@ -5,6 +5,7 @@ metadata {
     preferences {
         input("DeviceAddress", "string", title:"PTPager IP Address", description:"IP address of the machine running PTPager", defaultValue:"" , required: true, displayDuringSetup: true)
         input("DevicePort", "string", title:"PTPager Port", description:"Port of the machine running PTPager", defaultValue:"5566", required: true, displayDuringSetup: true)
+        input("PagingChannel", "string", title:"PTPager Channel", description:"Channel to send pages on", defaultValue:"1", required: true, displayDuringSetup: true)
     }
     tiles {
         standardTile("speak", "device.speech", inactiveLabel: false, decoration: "flat") 
@@ -14,7 +15,7 @@ metadata {
     }
 }
 
-String getVersion() {return "0.2";}
+String getVersion() {return "0.3";}
 
 /** speechSynthesis Capability: Speak
  */
