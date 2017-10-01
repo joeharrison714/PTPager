@@ -37,6 +37,7 @@
     <ProjectReference Include="..\PTPager.Alerting.Interfaces\PTPager.Alerting.Interfaces.csproj" />
     <ProjectReference Include="..\PTPager.Alerting.Model\PTPager.Alerting.Model.csproj" />
     <ProjectReference Include="..\PTPager.Alerting.Polycom\PTPager.Alerting.Polycom.csproj" />
+    <ProjectReference Include="..\PTPager.Alerting.Services\PTPager.Alerting.Services.csproj" />
     <ProjectReference Include="..\PTPager.Alerting.SystemSpeech\PTPager.Alerting.SystemSpeech.csproj" />
     <ProjectReference Include="..\PTPager.Control\PTPager.Control.csproj" />
   </ItemGroup>

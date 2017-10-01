@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PTPager.Alerting.Services;
 
 namespace PTPager.Web.Controllers
 {
@@ -11,9 +12,18 @@ namespace PTPager.Web.Controllers
     [Route("api/Speak")]
     public class SpeakController : Controller
     {
-        [HttpGet]
-        public string Get(string toSay)
+        private AlertingService _alertingService;
+
+        public SpeakController(AlertingService alertingService)
         {
+            _alertingService = alertingService;
+        }
+
+        [HttpGet]
+        public string Get(int channel, string toSay)
+        {
+            _alertingService.Speak(channel, toSay);
+
             return "OK";
         }
     }
