@@ -24,7 +24,7 @@ namespace PTPager.ConsoleTest
             IAudioTransmitter audioTransmitter = new PolycomAudioTransmitter();
 
             AlertingService aservice = new AlertingService(synthesizeSpeech, audioTransmitter);
-            aservice.Speak(3, "Testing 123");
+            aservice.Speak(3, "I think I got this to work again");
         }
     }
 }

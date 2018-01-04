@@ -11,18 +11,21 @@ namespace SystemSpeech
 {
     public class MeWantSpeech
     {
+        SpeechSynthesizer _speechSynthesizer;
         SpeechAudioFormatInfo _formatInfo;
 
         public MeWantSpeech()
         {
             // convert text to audio stream using .net 3.x speechsynthesis g.711 u-law (pcm 64kb/s bit rate (u-law encodes 14-bit to 8-bit samples by adding 32 / binary 100000)
-            var speaker = new SpeechSynthesizer();
+            _speechSynthesizer = new SpeechSynthesizer();
 
-            // select male senior (if it exists)
-            speaker.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Adult);
+            // select (if it exists)
+            _speechSynthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Adult);
 
             // can also change voice with SelectVoice method
-            speaker.Rate = 1;
+            _speechSynthesizer.Rate = 1;
+
+
             // encoding format enums are Pcm, ALaw, ULaw
             int samplesPerSecond = 8000;
             int bitsPerSample = 8;
@@ -38,11 +41,9 @@ namespace SystemSpeech
 
         public void GenerateToFile(string text, string filename)
         {
-            var speechSynthesizer = new SpeechSynthesizer();
+            _speechSynthesizer.SetOutputToWaveFile(filename, _formatInfo);
 
-            speechSynthesizer.SetOutputToWaveFile(filename, _formatInfo);
-
-            speechSynthesizer.Speak(text);
+            _speechSynthesizer.Speak(text);
         }
 
         public byte[] GenerateToByteArray(string text)

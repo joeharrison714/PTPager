@@ -148,6 +148,10 @@ namespace PTPager.Alerting.Polycom
 
         private void SendPacket(byte[] packet)
         {
+            IPAddress localInterface = IPAddress.Any;
+
+            localInterface = IPAddress.Parse("10.1.10.59");
+
             _stopwatch.Restart();
             //return;
             using (Socket mSendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
@@ -156,7 +160,7 @@ namespace PTPager.Alerting.Polycom
                                             new MulticastOption(IPAddress.Parse(address)));
                 mSendSocket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 255);
                 mSendSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                mSendSocket.Bind(new IPEndPoint(IPAddress.Any, port));
+                mSendSocket.Bind(new IPEndPoint(localInterface, port));
                 IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(address), port);
                 mSendSocket.Connect(ipep);
 

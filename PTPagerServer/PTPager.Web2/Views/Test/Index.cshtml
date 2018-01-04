@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Speech Test</h2>
+
+@using (Html.BeginForm())
+{
+    <span>Channel:</span> <input type="text" name="channel" value="1" /><br />
+    <span>To Say:</span> <input type="text" name="toSay" /><br />
+
+    <button type="submit">Submit</button>
+}
