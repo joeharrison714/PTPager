@@ -31,6 +31,22 @@ mappings {
       PUT: "updateSwitches"
     ]
   }
+  path("/routines") {
+    action: [
+      GET: "listRoutines"
+    ]
+  }
+}
+
+def listRoutines() {
+
+    def resp = []
+	
+	def actions = location.helloHome?.getPhrases()*.label
+    actions.each {
+        resp << [name: it]
+    }
+    return resp
 }
 
 // returns a list like
