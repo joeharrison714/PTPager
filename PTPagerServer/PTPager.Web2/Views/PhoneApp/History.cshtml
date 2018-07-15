@@ -1,0 +1,29 @@
+﻿@model IEnumerable<PTPager.Web2.Models.SpeechHistoryItem>
+@{
+    Layout = null;
+
+}
+
+
+
+<html>
+
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Announcement</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Date</td>
+            <td>@item.Speech</td>
+        </tr>
+    }
+</table>
+
+@*<softkey index="1" label="Home" action="SoftKey:Home" />
+<softkey index="2" label="Refresh" action="SoftKey:Refresh" />
+<softkey index="4" label="Exit" action="SoftKey:Exit" />
+<softkey index="3" label="Back" action="SoftKey:Back" />*@
+</html>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PTPager.Alerting.Services;
+using PTPager.Web2.Repository;
 
 namespace PTPager.Web2.Controllers
 {
@@ -29,6 +30,15 @@ namespace PTPager.Web2.Controllers
             {
                 _alertingService.Speak(channel, toSay);
             }
+
+            var historyRepository = new SpeechHistoryRepository();
+
+            historyRepository.Save(new Models.SpeechHistoryItem()
+            {
+                Channel = channel,
+                Speech = toSay,
+                Date = DateTime.Now
+            });
 
             return RedirectToAction("index");
         }

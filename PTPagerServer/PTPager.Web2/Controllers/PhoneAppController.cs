@@ -32,5 +32,14 @@ namespace PTPager.Web2.Controllers
 
             return View(devices);
         }
+
+        public async Task<IActionResult> History()
+        {
+            var history = new SpeechHistoryRepository();
+
+            var data = history.GetAll();
+
+            return View(data);
+        }
     }
 }
