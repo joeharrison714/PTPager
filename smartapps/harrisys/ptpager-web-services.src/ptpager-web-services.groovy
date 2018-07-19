@@ -2,6 +2,9 @@
  *  PTPager Web Services
  *
  */
+ 
+ import groovy.json.JsonBuilder
+ 
 definition(
     name: "PTPager Web Services",
     namespace: "Harrisys",
@@ -31,22 +34,59 @@ mappings {
       PUT: "updateSwitches"
     ]
   }
-  path("/routines") {
-    action: [
-      GET: "listRoutines"
-    ]
-  }
+  path("/routines") 							{   action: [   GET: "listRoutines"        														]}
+  path("/routines/:id") 						{   action: [   GET: "listRoutines",            	POST: "executeRoutine"        				]}
 }
 
-def listRoutines() {
+/****************************
+* Routine API Commands
+****************************/
 
-    def resp = []
-	
-	def actions = location.helloHome?.getPhrases()*.label
-    actions.each {
-        resp << [name: it]
+/**
+* Gets Routines for location, if params.id is provided, get details for that Routine
+*
+* @param params.id is the routine id
+* @return renders json
+*/
+def listRoutines() {
+	debug("listRoutines called")
+    def id = params?.id
+    def results = []
+    // if there is an id parameter, list only that routine. Otherwise list all routines in location
+    if(id) {
+        def routine = location.helloHome?.getPhrases().find{it.id == id}
+        def myRoutine = [:]
+        if(!routine) {
+            httpError(404, "Routine not found")
+        } else {
+            render contentType: "text/json", data: new JsonBuilder(getRoutine(routine)).toPrettyString()            
+        }
+    } else {
+        location.helloHome?.getPhrases().each { routine ->
+            results << getRoutine(routine)
+        }
+        debug("Returning ROUTINES: $results")
+        render contentType: "text/json", data: new JsonBuilder(results).toPrettyString()
     }
-    return resp
+}
+
+/**
+* Executes Routine for location
+*
+* @param params.id is the routine id
+* @return renders json
+*/
+def executeRoutine() {
+	debug("executeRoutine called")
+    def id = params?.id
+    def routine = location.helloHome?.getPhrases().find{it.id == id}
+    if(!routine) {
+        httpError(404, "Routine not found")
+    } else {
+        debug("Executing Routine: $routine.label in location: $location.name")
+        location.helloHome?.execute(routine.label)
+        render contentType: "text/json", data: new JsonBuilder(routine).toPrettyString()
+    }
 }
 
 // returns a list like
