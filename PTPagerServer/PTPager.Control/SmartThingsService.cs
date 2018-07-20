@@ -5,6 +5,7 @@ using PTPager.Control.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace PTPager.Control
@@ -20,22 +21,62 @@ namespace PTPager.Control
             _apiUrl = apiUrl;
         }
 
+        public async Task<string> GetCurrentMode()
+        {
+            Flurl.Url url = new Flurl.Url(_apiUrl);
+            string content = await url.AppendPathSegment("locations")
+                .WithHeader("Authorization", string.Format("Bearer " + _apiToken))
+                .GetStringAsync();
 
-        public async Task<IEnumerable<Device>> ListDevices()
+            Console.WriteLine(content);
+
+            var json = JObject.Parse(content);
+
+            string currentMode = json["currentMode"]["name"].Value<string>();
+
+            return currentMode;
+        }
+
+        public async Task ExecuteRoutine(string id)
+        {
+            Flurl.Url url = new Flurl.Url(_apiUrl);
+            await url.AppendPathSegments("routines", id)
+                .WithHeader("Authorization", string.Format("Bearer " + _apiToken))
+                .PostAsync(new StringContent(""));
+        }
+
+        public async Task<IEnumerable<Routine>> ListRoutines()
+        {
+            Flurl.Url url = new Flurl.Url(_apiUrl);
+            string content = await url.AppendPathSegment("routines")
+                .WithHeader("Authorization", string.Format("Bearer " + _apiToken))
+                .GetStringAsync();
+
+            Console.WriteLine(content);
+
+            var array = JArray.Parse(content);
+
+            List<Routine> items = new List<Routine>();
+
+            foreach (var item in array)
+            {
+                items.Add(new Routine()
+                {
+                    Label = item["label"].Value<string>(),
+                    Id = item["id"].Value<string>(),
+                });
+            }
+
+            return items;
+        }
+
+
+            public async Task<IEnumerable<Device>> ListDevices()
         {
             Flurl.Url url = new Flurl.Url(_apiUrl);
             string content = await url.AppendPathSegment("switches")
                 .WithHeader("Authorization", string.Format("Bearer " + _apiToken))
                 .GetStringAsync();
-
-            //var client = new RestClient(_apiUrl);
-            //RestRequest request = new RestRequest("switches", Method.GET);
-            //request.AddParameter("Authorization",
-            //string.Format("Bearer " + _apiToken),
-            //            ParameterType.HttpHeader);
-            //request.AddHeader("Accept", "application/json");
-            //request.RequestFormat = DataFormat.Json;
-            //var resp = await client.ExecuteAsync(request);
 
             Console.WriteLine(content);
 

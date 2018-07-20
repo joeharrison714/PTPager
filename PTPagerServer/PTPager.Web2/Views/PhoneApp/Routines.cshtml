@@ -1,0 +1,39 @@
+﻿@using PTPager.Web2.Models
+@model IEnumerable<RoutineInfo>
+@{
+    Layout = null;
+
+    int num = 1;
+
+    Dictionary<int, RoutineInfo> data = new Dictionary<int, RoutineInfo>();
+    foreach (var item in Model.OrderBy(p => p.OrderNo))
+    {
+        data.Add(num, item);
+        num++;
+    }
+}
+
+
+
+<html>
+
+<head>
+    <title>Routines</title>
+</head>
+<body>
+    <p>Current Mode: @ViewBag.CurrentMode</p>
+
+    <table>
+        @foreach (var item in data)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Value.Label, "ExecuteRoutine", "phoneapp", new { id = item.Value.Id })
+                </td>
+            </tr>
+            num++;
+        }
+    </table>
+
+</body>
+</html>
