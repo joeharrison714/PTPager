@@ -34,6 +34,7 @@ mappings {
       PUT: "updateSwitches"
     ]
   }
+  path("/locations") 							{	action: [	GET: "listLocation"        														]}
   path("/routines") 							{   action: [   GET: "listRoutines"        														]}
   path("/routines/:id") 						{   action: [   GET: "listRoutines",            	POST: "executeRoutine"        				]}
 }
@@ -89,6 +90,37 @@ def executeRoutine() {
     }
 }
 
+/****************************
+* Location Methods
+****************************/
+
+/**
+* Gets the location object
+*
+* @return renders json
+*/
+def listLocation() {
+	debug("listLocation called")
+    def result = [:]
+    ["contactBookEnabled", "name", "temperatureScale", "zipCode"].each {
+        result << [(it) : location."$it"]
+    }
+    result << ["latitude" : location.latitude as String]
+    result << ["longitude" : location.longitude as String]
+    result << ["timeZone" : location.timeZone?.getDisplayName()]
+    result << ["currentMode" : getMode(location.currentMode)]
+
+    // add hubs for this location to the result
+    def hubs = []
+    location.hubs?.each {
+        hubs << getHub(it)
+    }
+    result << ["hubs" : hubs]
+    debug("Returning LOCATION: $result")
+    //result
+    render contentType: "text/json", data: new JsonBuilder(result).toPrettyString()
+}
+
 // returns a list like
 // [[name: "kitchen lamp", value: "off"], [name: "bathroom", value: "on"]]
 def listSwitches() {
@@ -122,3 +154,102 @@ void updateSwitches() {
 def installed() {}
 
 def updated() {}
+
+/****************************
+* Private Methods
+****************************/
+
+/**
+* Builds a map of hub details
+*
+* @param hub id (optional), explodedView to show details
+* @return a map of hub
+*/
+private getHub(hub, explodedView = false) {
+	debug("getHub called")
+    def result = [:]
+    //put the id and name into the result
+    ["id", "name"].each {
+        result << [(it) : hub."$it"]
+    }
+
+    // if we want detailed information about this hub
+    if(explodedView) {
+        ["firmwareVersionString", "localIP", "localSrvPortTCP", "zigbeeEui", "zigbeeId"].each {
+            result << [(it) : hub."$it"]
+        }
+        result << ["type" : hub.type as String]
+    }
+    debug("Returning HUB: $result")
+    result
+}
+
+/**
+* Gets the hub detail
+*
+* @param params.id is the hub id
+* @return renders json
+*/
+def getHubDetail() {
+	debug("getHubDetail called")
+    def id = params?.id
+    debug("getting hub detail for id: " + id)
+    if(id) {
+        def hub = location.hubs?.find{it.id == id}
+        def result = [:]
+        //put the id and name into the result
+        ["id", "name"].each {
+            result << [(it) : hub."$it"]
+        }
+        ["firmwareVersionString", "localIP", "localSrvPortTCP", "zigbeeEui", "zigbeeId", "type"].each {
+            result << [(it) : hub."$it"]
+        }
+        result << ["type" : hub.type as String]
+
+        debug("Returning HUB: $result")
+        render contentType: "text/json", data: new JsonBuilder(result).toPrettyString()
+    }
+}
+
+/**
+* gets mode information
+*
+* @param mode object
+* @return a map of mode information
+*/
+private getMode(mode, explodedView = false) {
+	debug("getMode called")
+    def result = [:]
+    ["id", "name"].each {
+        result << [(it) : mode."$it"]
+    }
+
+    if(explodedView) {
+        ["locationId"].each {
+            result << [(it) : mode."$it"]
+        }
+    }
+    result
+}
+
+/**
+* gets Routine information
+*
+* @param routine object
+* @return a map of routine information
+*/
+private getRoutine(routine) {
+	debug("getRoutine called")
+    def result = [:]
+    ["id", "label"].each {
+        result << [(it) : routine."$it"]
+    }
+    result
+}
+
+//Debug Router to log events if logging is turned on
+def debug(evt) {
+	if (logging) {
+    	log.debug evt
+    }
+}
