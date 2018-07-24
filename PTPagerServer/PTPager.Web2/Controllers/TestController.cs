@@ -20,6 +20,7 @@ namespace PTPager.Web2.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+
             return View();
         }
 

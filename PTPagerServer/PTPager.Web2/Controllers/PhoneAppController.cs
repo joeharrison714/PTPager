@@ -19,6 +19,11 @@ namespace PTPager.Web2.Controllers
         [HttpGet]
         public IActionResult Test()
         {
+            if (HttpContext.Request.QueryString != null)
+            {
+                ViewBag.QueryString = HttpContext.Request.QueryString.ToUriComponent();
+            }
+
             return View();
         }
 

@@ -6,13 +6,17 @@
     <title>Test</title>
 </head>
 <body>
+    @ViewBag.QueryString
     <form name="Form1" action="@(Url.Action("test"))" method="post">
         <input type="text" name="txt1" />
         <input type="submit" name="KeyName" value="Submit" />
     </form>
 </body>
 @*<softkey index="1" label="Fetch" action="SoftKey:Submit" />
-<softkey index="2" label="Refresh" action="SoftKey:Refresh" />
-<softkey index="4" label="Exit" action="SoftKey:Exit" />
-<softkey index="3" label="Back" action="SoftKey:Back" />*@
+    <softkey index="2" label="Refresh" action="SoftKey:Refresh" />
+    <softkey index="4" label="Exit" action="SoftKey:Exit" />
+    <softkey index="3" label="Back" action="SoftKey:Back" />*@
+<softkey index="1" label="Refresh" action="SoftKey:Refresh" />
+<softkey index="2" label="T2" action="SoftKey:Exit" />
+<softkey index="3" label="T3" action="SoftKey:Fetch;@(Url.Action("test", null, new { hello = "1" }, Context.Request.Scheme))" />
 </html>
