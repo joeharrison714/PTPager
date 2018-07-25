@@ -13,13 +13,13 @@ namespace PTPager.Web2.Controllers
     public class SpeakController : Controller
     {
         private AlertingService _alertingService;
-        private SpeechHistoryRepository _historyRepository;
+        private FileSpeechHistoryRepository _historyRepository;
 
         public SpeakController(AlertingService alertingService)
         {
             _alertingService = alertingService;
 
-            _historyRepository = new SpeechHistoryRepository();
+            _historyRepository = new FileSpeechHistoryRepository();
         }
 
         [HttpGet]

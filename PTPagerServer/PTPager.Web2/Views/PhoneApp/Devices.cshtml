@@ -7,15 +7,20 @@
 
 
 <html>
-@foreach (var device in Model)
-{
-    <input type="checkbox" /> @device.Name
-    <br />
-    <input type="button" value="Test"  />
-}
-    <br />
-    <softkey index="1" label="Home" action="SoftKey:Home" />
-    <softkey index="2" label="Refresh" action="SoftKey:Refresh" />
-    <softkey index="4" label="Exit" action="SoftKey:Exit" />
-    <softkey index="3" label="Back" action="SoftKey:Back" />
+<head><title>Devices</title></head>
+<body>
+    <table>
+        <tr>
+            <th>Device</th>
+            <th>State</th>
+        </tr>
+        @foreach (var device in Model.OrderBy(p => p.Name))
+        {
+            <tr>
+                <td>@device.Name</td>
+                <td>@device.State</td>
+            </tr>
+        }
+    </table>
+</body>
 </html>

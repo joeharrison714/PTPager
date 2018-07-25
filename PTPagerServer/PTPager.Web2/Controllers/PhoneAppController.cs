@@ -11,6 +11,21 @@ namespace PTPager.Web2.Controllers
 {
     public class PhoneAppController : Controller
     {
+        private SmartThingsService GetSmartThingsService()
+        {
+            OauthInfo authInfo = OauthRepository.Get();
+
+            if (authInfo == null | authInfo.endpoints == null || authInfo.endpoints.Count == 0)
+            {
+                throw new Exception("OAuth endpoints have not been created. Cannot update smart things at this time");
+            }
+            string url = authInfo.endpoints[0].uri;
+            string token = authInfo.accessToken;
+
+            SmartThingsService service = new SmartThingsService(token, url);
+            return service;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -35,91 +50,85 @@ namespace PTPager.Web2.Controllers
 
         public async Task<IActionResult> ExecuteRoutine(string id)
         {
-            OauthInfo authInfo = OauthRepository.Get();
-
-            if (authInfo == null | authInfo.endpoints == null || authInfo.endpoints.Count == 0)
-            {
-                throw new Exception("OAuth endpoints have not been created. Cannot update smart things at this time");
-            }
-            string url = authInfo.endpoints[0].uri;
-            string token = authInfo.accessToken;
-
-            SmartThingsService service = new SmartThingsService(token, url);
+            var service = GetSmartThingsService();
             await service.ExecuteRoutine(id);
 
             return RedirectToAction("Routines");
         }
 
-        public async Task<IActionResult> Routines()
+        [HttpPost]
+        public async Task<IActionResult> ExecuteItem(string id, string itemType, string itemAction)
         {
-            OauthInfo authInfo = OauthRepository.Get();
+            var service = GetSmartThingsService();
 
-            if (authInfo == null | authInfo.endpoints == null || authInfo.endpoints.Count == 0)
+            string message = "Nothing to do";
+
+            if (string.Equals(itemType, "routine", StringComparison.OrdinalIgnoreCase))
             {
-                throw new Exception("OAuth endpoints have not been created. Cannot update smart things at this time");
-            }
-            string url = authInfo.endpoints[0].uri;
-            string token = authInfo.accessToken;
+                var routines = await service.ListRoutines();
 
-            SmartThingsService service = new SmartThingsService(token, url);
-            var routines = await service.ListRoutines();
+                var r = routines.SingleOrDefault(p => p.Label == itemAction);
 
-            bool routineOrderDitry = false;
-            RoutineOrder routineOrder = RoutineOrderRepository.Get();
-
-            List<RoutineInfo> routineInfoList = new List<RoutineInfo>();
-
-            foreach(var routine in routines)
-            {
-                var thisRO = routineOrder.Items.SingleOrDefault(p => p.Label == routine.Label);
-
-                if (thisRO == null)
+                if (r != null)
                 {
-                    thisRO = new RoutineOrderItem()
-                    {
-                        Label = routine.Label,
-                        Visible = true,
-                        Order = 100
-                    };
-                    routineOrder.Items.Add(thisRO);
-                    routineOrderDitry = true;
+                    await service.ExecuteRoutine(r.Id);
+                    message = $"'{r.Label}' has been executed";
                 }
-
-                if (!thisRO.Visible) continue;
-
-                var routineInfo = new RoutineInfo()
-                {
-                    Label = routine.Label,
-                    Id = routine.Id,
-                    OrderNo = thisRO.Order
-                };
-
-                routineInfoList.Add(routineInfo);
             }
 
-            if (routineOrderDitry)
-            {
-                RoutineOrderRepository.Save(routineOrder);
-            }
+            return RedirectToAction("ExecuteItemDone", new { message = message });
+        }
+
+        public async Task<IActionResult> ExecuteItemDone(string message)
+        {
+            var service = GetSmartThingsService();
 
             string currentMode = await service.GetCurrentMode();
             ViewBag.CurrentMode = currentMode;
 
-            return View(routineInfoList);
+            ViewBag.Message = message;
+
+            return View();
         }
 
-            public async Task<IActionResult> Devices()
+        public async Task<IActionResult> Screens(string id)
         {
-            OauthInfo authInfo = OauthRepository.Get();
+            var service = GetSmartThingsService();
+            var routines = await service.ListRoutines();
 
-            if (authInfo == null | authInfo.endpoints == null || authInfo.endpoints.Count == 0)
+            string currentMode = await service.GetCurrentMode();
+            ViewBag.CurrentMode = currentMode;
+
+            ScreenData screenData = ScreensRepository.Get();
+
+            if (!string.IsNullOrWhiteSpace(id))
             {
-                throw new Exception("OAuth endpoints have not been created. Cannot update smart things at this time");
+                var selectedScreen = screenData.Screens.SingleOrDefault(p => p.Id == id);
+                if (selectedScreen == null)
+                {
+                    return NotFound();
+                }
+                return View("Screen", selectedScreen);
             }
-            string url = authInfo.endpoints[0].uri;
-            string token = authInfo.accessToken;
 
-            SmartThingsService service = new SmartThingsService(token, url);
+            return View("Screens", screenData);
+        }
+
+        public async Task<IActionResult> Routines()
+        {
+            var service = GetSmartThingsService();
+            var routines = await service.ListRoutines();
+            
+
+            string currentMode = await service.GetCurrentMode();
+            ViewBag.CurrentMode = currentMode;
+
+            return View(routines);
+        }
+
+        public async Task<IActionResult> Devices()
+        {
+            var service = GetSmartThingsService();
             var devices = await service.ListDevices();
 
             return View(devices);
@@ -127,7 +136,7 @@ namespace PTPager.Web2.Controllers
 
         public async Task<IActionResult> History()
         {
-            var history = new SpeechHistoryRepository();
+            var history = new FileSpeechHistoryRepository();
 
             var data = history.GetAll();
 
