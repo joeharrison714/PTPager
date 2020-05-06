@@ -150,7 +150,7 @@ namespace PTPager.Alerting.Polycom
         {
             IPAddress localInterface = IPAddress.Any;
 
-            localInterface = IPAddress.Parse("10.1.10.59");
+            localInterface = IPAddress.Parse("10.1.10.53");
 
             _stopwatch.Restart();
             //return;

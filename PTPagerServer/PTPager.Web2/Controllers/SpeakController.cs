@@ -14,27 +14,39 @@ namespace PTPager.Web2.Controllers
     {
         private AlertingService _alertingService;
         private FileSpeechHistoryRepository _historyRepository;
+		private FileSnoozeService _snoozeService;
 
         public SpeakController(AlertingService alertingService)
         {
             _alertingService = alertingService;
 
             _historyRepository = new FileSpeechHistoryRepository();
-        }
+			_snoozeService = new FileSnoozeService();
+		}
 
         [HttpGet]
         public string Get(int channel, string toSay)
         {
-            _alertingService.Speak(channel, toSay);
+			try
+			{
+				if (!_snoozeService.IsSnoozed())
+				{
+					_alertingService.Speak(channel, toSay);
+				}
 
-            _historyRepository.Save(new Models.SpeechHistoryItem()
-            {
-                Channel = channel,
-                Speech = toSay,
-                Date = DateTime.Now
-            });
+				_historyRepository.Save(new Models.SpeechHistoryItem()
+				{
+					Channel = channel,
+					Speech = toSay,
+					Date = DateTime.Now
+				});
 
-            return "OK";
+				return "OK";
+			}
+			catch (Exception ex)
+			{
+				return ex.ToString();
+			}
         }
     }
 }

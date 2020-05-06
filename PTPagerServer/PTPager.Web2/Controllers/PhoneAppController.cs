@@ -11,6 +11,8 @@ namespace PTPager.Web2.Controllers
 {
     public class PhoneAppController : Controller
     {
+		
+
         private SmartThingsService GetSmartThingsService()
         {
             OauthInfo authInfo = OauthRepository.Get();
@@ -142,5 +144,31 @@ namespace PTPager.Web2.Controllers
 
             return View(data);
         }
-    }
+
+		public async Task<IActionResult> Snooze()
+		{
+			var snoozeService = new FileSnoozeService();
+
+			DateTime? su = snoozeService.GetSnoozedUntil();
+
+			return View(su);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> DoSnooze(int? minutes)
+		{
+			var snoozeService = new FileSnoozeService();
+
+			if (minutes.HasValue)
+			{
+				snoozeService.Snooze(minutes.Value);
+			}
+			else
+			{
+				snoozeService.CancelSnooze();
+			}
+
+			return RedirectToAction("snooze");
+		}
+	}
 }

@@ -1,0 +1,48 @@
+﻿@using PTPager.Web2.Models
+@model DateTime?
+@{
+    Layout = null;
+
+    int num = 1;
+
+    List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
+    list.Add(new KeyValuePair<string, string>("5", "5 min"));
+    list.Add(new KeyValuePair<string, string>("60", "1 hour"));
+    list.Add(new KeyValuePair<string, string>("1440", "1 day"));
+    list.Add(new KeyValuePair<string, string>("", "Unsnooze"));
+}
+<html>
+
+<head>
+    <title>Snooze</title>
+</head>
+<body>
+
+    @if (Model.HasValue)
+    {
+
+        <strong>Snoozed Until: @Model.Value.ToString()</strong>
+    }
+    else
+    {
+        <strong>Not Snoozed</strong>
+    }
+
+    @foreach (var item in list)
+    {
+        using (Html.BeginForm("dosnooze", "phoneapp", new { id = "frm" + num }, FormMethod.Post))
+        {
+            <input type="hidden" name="minutes" value="@item.Key" />
+            <softkey index="@(num.ToString())" name="btn@(num)" label="@(item.Value)" action="SoftKey:Submit" />
+            @if (System.Diagnostics.Debugger.IsAttached)
+            {
+                <button type="submit">@(item.Value)</button>
+            }
+            num++;
+        }
+    }
+
+</body>
+<softkey index="@(num+1)" label="Refresh" action="SoftKey:Refresh" />
+<softkey index="@(num+2)" label="Exit" action="SoftKey:Exit" />
+</html>
