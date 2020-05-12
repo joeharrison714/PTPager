@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Amazon.Polly;
+using Amazon.Polly.Model;
+using Microsoft.Extensions.Options;
 using NAudio.Wave;
 using PTPager.Alerting.Interfaces;
 using PTPager.Alerting.Polycom;
@@ -22,9 +24,146 @@ namespace PTPager.ConsoleTest
 
 
 
-            TestMp3();
-            TestWav();
-            
+            //TestMp3();
+            //TestWav();
+            TestPolly3();
+        }
+
+        public static void TestPolly()
+        {
+            using (AmazonPollyClient pc = new AmazonPollyClient())
+            {
+
+                SynthesizeSpeechRequest sreq = new SynthesizeSpeechRequest();
+                sreq.Text = "Your Sample Text Here 123";
+                sreq.OutputFormat = OutputFormat.Mp3;
+                sreq.VoiceId = VoiceId.Salli;
+                SynthesizeSpeechResponse sres = pc.SynthesizeSpeechAsync(sreq).GetAwaiter().GetResult();
+
+                using (var fileStream = File.Create(@".\TestAudio\output-from-polly.mp3"))
+                {
+                    sres.AudioStream.CopyTo(fileStream);
+                    fileStream.Flush();
+                    fileStream.Close();
+                }
+            }
+        }
+
+        public static void TestPolly2()
+        {
+            using (AmazonPollyClient pc = new AmazonPollyClient())
+            {
+
+                SynthesizeSpeechRequest sreq = new SynthesizeSpeechRequest();
+                sreq.Text = "Your Sample Text Here 123";
+                sreq.OutputFormat = OutputFormat.Mp3;
+                sreq.VoiceId = VoiceId.Salli;
+                SynthesizeSpeechResponse sres = pc.SynthesizeSpeechAsync(sreq).GetAwaiter().GetResult();
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    sres.AudioStream.CopyTo(memoryStream);
+                    memoryStream.Flush();
+
+                    memoryStream.Position = 0;
+
+                    string outputFile = @".\TestAudio\output-from-polly.wav";
+
+                    using (Mp3FileReader reader = new Mp3FileReader(memoryStream))
+                    {
+                        using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
+                        {
+                            WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void TestPolly3()
+        {
+            Dictionary<uint, byte[]> audioBytes = new Dictionary<uint, byte[]>();
+
+            var ulawFormat = WaveFormat.CreateMuLawFormat(8000, 1);
+
+            string tempFile = Path.GetTempFileName();
+
+            try
+            {
+                using (AmazonPollyClient pc = new AmazonPollyClient())
+                {
+
+                    SynthesizeSpeechRequest sreq = new SynthesizeSpeechRequest();
+                    sreq.Text = "Your Sample Text Here 123";
+                    sreq.OutputFormat = OutputFormat.Mp3;
+                    sreq.VoiceId = VoiceId.Salli;
+                    SynthesizeSpeechResponse sres = pc.SynthesizeSpeechAsync(sreq).GetAwaiter().GetResult();
+
+
+                    using (var pollyMemoryStream = new MemoryStream())
+                    {
+                        sres.AudioStream.CopyTo(pollyMemoryStream);
+                        pollyMemoryStream.Flush();
+
+                        pollyMemoryStream.Position = 0;
+
+                        using (Mp3FileReader reader = new Mp3FileReader(pollyMemoryStream))
+                        {
+                            using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
+                            {
+                                //WaveFileWriter.WriteWavFileToStream(pcmWaveStream, pcmStream);
+                                WaveFileWriter.CreateWaveFile(tempFile, pcmStream);
+                            }
+                        }
+                    }
+
+                }
+
+
+                var pcmFormat = new WaveFormat(8000, 16, 1);
+                uint timestamp = 0;
+
+                using (WaveFormatConversionStream pcmStm = new WaveFormatConversionStream(pcmFormat, new WaveFileReader(tempFile)))
+                {
+                    using (WaveFormatConversionStream ulawStm = new WaveFormatConversionStream(ulawFormat, pcmStm))
+                    {
+                        byte[] buffer = new byte[160];
+                        int bytesRead = ulawStm.Read(buffer, 0, 160);
+
+                        while (bytesRead > 0)
+                        {
+                            byte[] sample = new byte[bytesRead];
+                            Array.Copy(buffer, sample, bytesRead);
+                            audioBytes.Add(timestamp, sample);
+                            timestamp += 160;
+
+                            bytesRead = ulawStm.Read(buffer, 0, 160);
+                        }
+                    }
+                }
+
+                string fileName = @".\TestAudio\output-from-polly-mp3-then-wav.wav";
+                using (WaveFileWriter writer = new WaveFileWriter(fileName, ulawFormat))
+                {
+                    var testSequence = audioBytes.SelectMany(p => p.Value).ToArray();
+                    writer.Write(testSequence, 0, testSequence.Length);
+                }
+            }
+            finally
+            {
+                try
+                {
+                    File.Delete(tempFile);
+                }
+                catch { }
+            }
+
+            //string fileName = @".\TestAudio\output-from-polly-mp3-then-wav.wav";
+            //using (WaveFileWriter writer = new WaveFileWriter(fileName, ulawFormat))
+            //{
+            //    var testSequence = audioBytes.SelectMany(p => p.Value).ToArray();
+            //    writer.Write(testSequence, 0, testSequence.Length);
+            //}
         }
 
         private static void TestWav()
