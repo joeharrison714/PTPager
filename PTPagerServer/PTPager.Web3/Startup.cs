@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PTPager.Alerting.Interfaces;
+using PTPager.Alerting.PollySpeech;
+using PTPager.Alerting.PollySpeech.Configuration;
+using PTPager.Alerting.Polycom;
+using PTPager.Alerting.Polycom.Configuration;
+using PTPager.Alerting.Services;
 
 namespace PTPager.Web3
 {
@@ -23,6 +29,13 @@ namespace PTPager.Web3
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+
+			services.Configure<PolycomAudioTransmitterConfiguration>(Configuration.GetSection("polycomAudioTransmitter"));
+			services.Configure<PollySpeechSynthesizerConfiguration>(Configuration.GetSection("pollySpeechSynthesizer"));
+
+			services.AddTransient<ISynthesizeSpeech, PollySpeechSynthesizer>();
+			services.AddTransient<IAudioTransmitter, PolycomAudioTransmitter>();
+			services.AddTransient<AlertingService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,6 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PTPager.Alerting.PollySpeech\PTPager.Alerting.PollySpeech.csproj" />
+    <ProjectReference Include="..\PTPager.Alerting.Polycom\PTPager.Alerting.Polycom.csproj" />
+    <ProjectReference Include="..\PTPager.Alerting.Services\PTPager.Alerting.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Views\Shared\_Layout.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

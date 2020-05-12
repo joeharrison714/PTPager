@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Web2", "PTPager.Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Web3", "PTPager.Web3\PTPager.Web3.csproj", "{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Alerting.PollySpeech", "PTPager.Alerting.PollySpeech\PTPager.Alerting.PollySpeech.csproj", "{EDF8D8C0-0CE5-4012-ACA8-F8967971EA23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDF8D8C0-0CE5-4012-ACA8-F8967971EA23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDF8D8C0-0CE5-4012-ACA8-F8967971EA23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDF8D8C0-0CE5-4012-ACA8-F8967971EA23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDF8D8C0-0CE5-4012-ACA8-F8967971EA23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

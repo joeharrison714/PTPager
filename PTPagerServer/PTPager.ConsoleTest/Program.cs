@@ -94,7 +94,7 @@ namespace PTPager.ConsoleTest
                 {
 
                     SynthesizeSpeechRequest sreq = new SynthesizeSpeechRequest();
-                    sreq.Text = "Your Sample Text Here 123";
+                    sreq.Text = "Something something something";
                     sreq.OutputFormat = OutputFormat.Mp3;
                     sreq.VoiceId = VoiceId.Salli;
                     SynthesizeSpeechResponse sres = pc.SynthesizeSpeechAsync(sreq).GetAwaiter().GetResult();
@@ -127,27 +127,29 @@ namespace PTPager.ConsoleTest
                 {
                     using (WaveFormatConversionStream ulawStm = new WaveFormatConversionStream(ulawFormat, pcmStm))
                     {
-                        byte[] buffer = new byte[160];
-                        int bytesRead = ulawStm.Read(buffer, 0, 160);
+                        string fileName = @".\TestAudio\output-from-polly-mp3-then-wav.wav";
+                        WaveFileWriter.CreateWaveFile(fileName, ulawStm);
+                        //byte[] buffer = new byte[160];
+                        //int bytesRead = ulawStm.Read(buffer, 0, 160);
 
-                        while (bytesRead > 0)
-                        {
-                            byte[] sample = new byte[bytesRead];
-                            Array.Copy(buffer, sample, bytesRead);
-                            audioBytes.Add(timestamp, sample);
-                            timestamp += 160;
+                        //while (bytesRead > 0)
+                        //{
+                        //    byte[] sample = new byte[bytesRead];
+                        //    Array.Copy(buffer, sample, bytesRead);
+                        //    audioBytes.Add(timestamp, sample);
+                        //    timestamp += 160;
 
-                            bytesRead = ulawStm.Read(buffer, 0, 160);
-                        }
+                        //    bytesRead = ulawStm.Read(buffer, 0, 160);
+                        //}
                     }
                 }
 
-                string fileName = @".\TestAudio\output-from-polly-mp3-then-wav.wav";
-                using (WaveFileWriter writer = new WaveFileWriter(fileName, ulawFormat))
-                {
-                    var testSequence = audioBytes.SelectMany(p => p.Value).ToArray();
-                    writer.Write(testSequence, 0, testSequence.Length);
-                }
+                //string fileName = @".\TestAudio\output-from-polly-mp3-then-wav.wav";
+                //using (WaveFileWriter writer = new WaveFileWriter(fileName, ulawFormat))
+                //{
+                //    var testSequence = audioBytes.SelectMany(p => p.Value).ToArray();
+                //    writer.Write(testSequence, 0, testSequence.Length);
+                //}
             }
             finally
             {
