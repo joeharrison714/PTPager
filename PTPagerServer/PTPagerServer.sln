@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Web", "PTPager.Web\PTPager.Web.csproj", "{E9828865-F0E1-474B-92F6-5AE7D9CA18EA}"
 EndProject
@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Control", "PTPager.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Alerting.Services", "PTPager.Alerting.Services\PTPager.Alerting.Services.csproj", "{754DA42E-05F2-4394-996B-409E88CE191D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Web2", "PTPager.Web2\PTPager.Web2.csproj", "{52350CC8-43E8-489D-93DD-0D8F553C9DBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTPager.Web2", "PTPager.Web2\PTPager.Web2.csproj", "{52350CC8-43E8-489D-93DD-0D8F553C9DBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTPager.Web3", "PTPager.Web3\PTPager.Web3.csproj", "{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{52350CC8-43E8-489D-93DD-0D8F553C9DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52350CC8-43E8-489D-93DD-0D8F553C9DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52350CC8-43E8-489D-93DD-0D8F553C9DBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3479BCE2-7C2F-4BF8-BBA3-F29F9F20B17C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

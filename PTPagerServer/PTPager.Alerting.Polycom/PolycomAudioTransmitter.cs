@@ -8,12 +8,24 @@ using System.Diagnostics;
 using System.Threading;
 using System.Net.Sockets;
 using System.Net;
+using Microsoft.Extensions.Options;
+using PTPager.Alerting.Polycom.Configuration;
 
 namespace PTPager.Alerting.Polycom
 {
     public class PolycomAudioTransmitter : IAudioTransmitter
     {
         const string CALLER_ID = "PTPager";
+
+        public readonly PolycomAudioTransmitterConfiguration _config;
+
+        public PolycomAudioTransmitter(IOptions<PolycomAudioTransmitterConfiguration> configOptions)
+        {
+            if (configOptions == null) throw new ArgumentNullException(nameof(configOptions));
+            if (configOptions.Value == null) throw new ArgumentNullException(nameof(configOptions));
+
+            _config = configOptions.Value;
+        }
 
         public void Transmit(int channel, AudioInfo audioInfo)
         {
@@ -150,7 +162,7 @@ namespace PTPager.Alerting.Polycom
         {
             IPAddress localInterface = IPAddress.Any;
 
-            localInterface = IPAddress.Parse("10.1.10.59");
+            localInterface = IPAddress.Parse(_config.BindingIp);
 
             _stopwatch.Restart();
             //return;
