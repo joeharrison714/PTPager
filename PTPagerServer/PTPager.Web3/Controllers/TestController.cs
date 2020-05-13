@@ -25,21 +25,28 @@ namespace PTPager.Web3.Controllers
         [HttpPost]
         public IActionResult Index(int channel, string toSay)
         {
-            if (!string.IsNullOrWhiteSpace(toSay))
+            try
             {
-                _alertingService.Speak(channel, toSay);
+                if (!string.IsNullOrWhiteSpace(toSay))
+                {
+                    _alertingService.Speak(channel, toSay);
+                }
+
+                //var historyRepository = new SpeechHistoryRepository();
+
+                //historyRepository.Save(new Models.SpeechHistoryItem()
+                //{
+                //    Channel = channel,
+                //    Speech = toSay,
+                //    Date = DateTime.Now
+                //});
+
+                return RedirectToAction("index");
             }
-
-            //var historyRepository = new SpeechHistoryRepository();
-
-            //historyRepository.Save(new Models.SpeechHistoryItem()
-            //{
-            //    Channel = channel,
-            //    Speech = toSay,
-            //    Date = DateTime.Now
-            //});
-
-            return RedirectToAction("index");
+            catch (Exception ex)
+            {
+                return Ok(ex.ToString());
+            }
         }
     }
 }

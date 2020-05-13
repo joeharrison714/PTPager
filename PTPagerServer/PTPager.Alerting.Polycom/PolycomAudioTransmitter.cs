@@ -19,12 +19,23 @@ namespace PTPager.Alerting.Polycom
 
         public readonly PolycomAudioTransmitterConfiguration _config;
 
+        private int _sleepBetweenAlertPackets = 30;
+        private int _sleepBetweenPackets = 20;
+        private int _sleepBeforeEndPackets = 50;
+        private int _sleepBetweenEndPackets = 30;
+
+
         public PolycomAudioTransmitter(IOptions<PolycomAudioTransmitterConfiguration> configOptions)
         {
             if (configOptions == null) throw new ArgumentNullException(nameof(configOptions));
             if (configOptions.Value == null) throw new ArgumentNullException(nameof(configOptions));
 
             _config = configOptions.Value;
+
+            if (_config.SleepBetweenAlertPackets > 0) _sleepBetweenAlertPackets = _config.SleepBetweenAlertPackets;
+            if (_config.SleepBetweenPackets > 0) _sleepBetweenPackets = _config.SleepBetweenPackets;
+            if (_config.SleepBeforeEndPackets > 0) _sleepBeforeEndPackets = _config.SleepBeforeEndPackets;
+            if (_config.SleepBetweenEndPackets > 0) _sleepBetweenEndPackets = _config.SleepBetweenEndPackets;
         }
 
         public void Transmit(int channel, AudioInfo audioInfo)
@@ -94,7 +105,7 @@ namespace PTPager.Alerting.Polycom
                     //Console.WriteLine("Alert");
                     byte[] packetData = alertPacket.ToPacket();
 
-                    if (i > 0) WaitFor(30);
+                    if (i > 0) WaitFor(_sleepBetweenAlertPackets);
 
                     SendPacket(packetData);
                 }
@@ -120,13 +131,13 @@ namespace PTPager.Alerting.Polycom
                 //Console.WriteLine("Transmit");
                 byte[] packetData = audioPacket.ToPacket();
 
-                WaitFor(20);
+                WaitFor(_sleepBetweenPackets);
 
                 SendPacket(packetData);
                 previousAudioData = (byte[])audioPacket.AudioData.Clone();
             }
 
-            WaitFor(50);
+            WaitFor(_sleepBeforeEndPackets);
 
             {
                 PolycomPTTPacket endPacket = new PolycomPTTPacket();
@@ -140,7 +151,7 @@ namespace PTPager.Alerting.Polycom
                     //Console.WriteLine("EndOfTransmit");
                     byte[] packetData = endPacket.ToPacket();
 
-                    if (i > 0) WaitFor(30);
+                    if (i > 0) WaitFor(_sleepBetweenEndPackets);
 
                     SendPacket(packetData);
                 }
@@ -152,10 +163,11 @@ namespace PTPager.Alerting.Polycom
 
         private void WaitFor(int milliseconds)
         {
-            while (_stopwatch.ElapsedMilliseconds < milliseconds)
-            {
-                Thread.Sleep(1);
-            }
+            //while (_stopwatch.ElapsedMilliseconds < milliseconds)
+            //{
+            //    Thread.Sleep(1);
+            //}
+            Thread.Sleep(milliseconds);
         }
 
         private void SendPacket(byte[] packet)

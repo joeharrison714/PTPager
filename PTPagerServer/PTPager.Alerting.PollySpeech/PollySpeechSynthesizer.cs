@@ -1,6 +1,7 @@
 ﻿using Amazon.Polly;
 using Amazon.Polly.Model;
 using Microsoft.Extensions.Options;
+using NAudio.FileFormats.Mp3;
 using NAudio.Wave;
 using PTPager.Alerting.Interfaces;
 using PTPager.Alerting.Model;
@@ -51,7 +52,7 @@ namespace PTPager.Alerting.PollySpeech
 
                         pollyMemoryStream.Position = 0;
 
-                        using (Mp3FileReader reader = new Mp3FileReader(pollyMemoryStream))
+                        using (Mp3FileReader reader = new Mp3FileReader(pollyMemoryStream, wave => new DmoMp3FrameDecompressor(wave)))
                         {
                             using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
                             {
