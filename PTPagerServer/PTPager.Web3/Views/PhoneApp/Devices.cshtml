@@ -1,0 +1,26 @@
+@model IEnumerable<PTPager.Control.Model.Device>
+@{
+    Layout = null;
+
+}
+
+
+
+<html>
+<head><title>Devices</title></head>
+<body>
+    <table>
+        <tr>
+            <th>Device</th>
+            <th>State</th>
+        </tr>
+        @foreach (var device in Model.OrderBy(p => p.Name))
+        {
+            <tr>
+                <td>@device.Name</td>
+                <td>@device.State</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

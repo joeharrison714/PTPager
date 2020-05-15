@@ -12,6 +12,7 @@
     <ProjectReference Include="..\PTPager.Alerting.PollySpeech\PTPager.Alerting.PollySpeech.csproj" />
     <ProjectReference Include="..\PTPager.Alerting.Polycom\PTPager.Alerting.Polycom.csproj" />
     <ProjectReference Include="..\PTPager.Alerting.Services\PTPager.Alerting.Services.csproj" />
+    <ProjectReference Include="..\PTPager.Control\PTPager.Control.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,23 @@
+﻿@using PTPager.Web3.Models
+@model IEnumerable<PTPager.Control.Model.Routine>
+@{
+    Layout = null;
+}
+
+
+
+<html>
+
+<head>
+    <title>Current Mode: @ViewBag.CurrentMode</title>
+</head>
+<body>
+    @foreach (var item in Model)
+    {
+        @Html.ActionLink(item.Label, "ExecuteRoutine", "phoneapp", new { id = item.Id })<br />
+    }
+
+</body>
+<softkey index="1" label="Home" action="SoftKey:Home" />
+<softkey index="2" label="Exit" action="SoftKey:Exit" />
+</html>
