@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon.Polly;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using PTPager.Alerting.PollySpeech.Configuration;
 using PTPager.Alerting.Polycom;
 using PTPager.Alerting.Polycom.Configuration;
 using PTPager.Alerting.Services;
+using PTPager.Web3.Configuration;
 
 namespace PTPager.Web3
 {
@@ -30,8 +32,12 @@ namespace PTPager.Web3
 		{
 			services.AddControllersWithViews();
 
+			services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+			services.AddAWSService<IAmazonPolly>();
+
 			services.Configure<PolycomAudioTransmitterConfiguration>(Configuration.GetSection("polycomAudioTransmitter"));
 			services.Configure<PollySpeechSynthesizerConfiguration>(Configuration.GetSection("pollySpeechSynthesizer"));
+			services.Configure<OAuthConfiguration>(Configuration.GetSection("oAuth"));
 
 			services.AddTransient<ISynthesizeSpeech, PollySpeechSynthesizer>();
 			services.AddTransient<IAudioTransmitter, PolycomAudioTransmitter>();

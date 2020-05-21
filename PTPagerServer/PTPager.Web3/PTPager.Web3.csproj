@@ -5,6 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="schtask.cmd" />
+    <None Remove="start.cmd" />
+    <None Remove="start.ps1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="schtask.cmd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="start.cmd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="start.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
   </ItemGroup>
 

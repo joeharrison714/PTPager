@@ -15,14 +15,17 @@ namespace PTPager.Alerting.PollySpeech
 {
 	public class PollySpeechSynthesizer : ISynthesizeSpeech
 	{
+        private readonly IAmazonPolly _amazonPolly;
         VoiceId voiceId = VoiceId.Salli;
 
-        public PollySpeechSynthesizer(IOptions<PollySpeechSynthesizerConfiguration> configOptions)
+        public PollySpeechSynthesizer(IAmazonPolly amazonPolly, IOptions<PollySpeechSynthesizerConfiguration> configOptions)
         {
             if (configOptions != null && configOptions.Value != null)
             {
                 voiceId = VoiceId.FindValue(configOptions.Value.VoiceId);
             }
+
+            _amazonPolly = amazonPolly;
         }
 
 		public AudioInfo Synthesize(string text)
@@ -35,32 +38,27 @@ namespace PTPager.Alerting.PollySpeech
 
             try
             {
-                using (AmazonPollyClient pc = new AmazonPollyClient())
+                SynthesizeSpeechRequest sreq = new SynthesizeSpeechRequest();
+                sreq.Text = text;
+                sreq.OutputFormat = OutputFormat.Mp3;
+                sreq.VoiceId = VoiceId.Salli;
+                SynthesizeSpeechResponse sres = _amazonPolly.SynthesizeSpeechAsync(sreq).GetAwaiter().GetResult();
+
+
+                using (var pollyMemoryStream = new MemoryStream())
                 {
+                    sres.AudioStream.CopyTo(pollyMemoryStream);
+                    pollyMemoryStream.Flush();
 
-                    SynthesizeSpeechRequest sreq = new SynthesizeSpeechRequest();
-                    sreq.Text = text + "...";
-                    sreq.OutputFormat = OutputFormat.Mp3;
-                    sreq.VoiceId = VoiceId.Salli;
-                    SynthesizeSpeechResponse sres = pc.SynthesizeSpeechAsync(sreq).GetAwaiter().GetResult();
+                    pollyMemoryStream.Position = 0;
 
-
-                    using (var pollyMemoryStream = new MemoryStream())
+                    using (Mp3FileReader reader = new Mp3FileReader(pollyMemoryStream, wave => new DmoMp3FrameDecompressor(wave)))
                     {
-                        sres.AudioStream.CopyTo(pollyMemoryStream);
-                        pollyMemoryStream.Flush();
-
-                        pollyMemoryStream.Position = 0;
-
-                        using (Mp3FileReader reader = new Mp3FileReader(pollyMemoryStream, wave => new DmoMp3FrameDecompressor(wave)))
+                        using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
                         {
-                            using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
-                            {
-                                WaveFileWriter.CreateWaveFile(tempFile, pcmStream);
-                            }
+                            WaveFileWriter.CreateWaveFile(tempFile, pcmStream);
                         }
                     }
-
                 }
 
 
