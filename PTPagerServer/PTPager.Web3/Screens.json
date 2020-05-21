@@ -1,0 +1,20 @@
+{
+  "Screens": [
+    {
+      "Id": "1",
+      "Label": "Routines",
+      "Items": [
+        {
+          "Label": "I'm Back",
+          "Type": "routine",
+          "Action": "I'm Back"
+        },
+        {
+          "Label": "Goodbye",
+          "Type": "routine",
+          "Action": "Goodbye!"
+        }
+      ]
+    }
+  ]
+}
