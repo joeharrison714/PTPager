@@ -1,0 +1,31 @@
+﻿@using PTPager.Web3.Models
+@model ScreenInfo
+@{
+    Layout = null;
+
+    int num = 1;
+}
+<html>
+
+<head>
+    <title>Current Mode: @ViewBag.CurrentMode</title>
+</head>
+<body>
+    @foreach (var item in Model.Items)
+    {
+        using (Html.BeginForm("ExecuteItem", "phoneapp", new { id = Model.Id }, FormMethod.Post))
+        {
+            <input type="hidden" name="itemAction" value="@item.Action" />
+            <input type="hidden" name="itemType" value="@item.Type" />
+            <softkey index="@(num.ToString())" name="@(item.Label)" label="@(item.Label)" action="SoftKey:Submit" />
+            @if (System.Diagnostics.Debugger.IsAttached)
+            {
+                <button type="submit">@(item.Label)</button>
+            }
+            num++;
+        }
+    }
+</body>
+<softkey index="@(num+1)" label="Refresh" action="SoftKey:Refresh" />
+<softkey index="@(num+2)" label="Exit" action="SoftKey:Exit" />
+</html>

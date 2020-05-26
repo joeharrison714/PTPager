@@ -306,3 +306,6 @@ OpenCover/
 SmartThings.json
 PTPagerServer/PTPager.Web2/RoutineOrder.json
 PTPagerServer/PTPager.Web2/Screens.json
+
+.config/
+PTPagerServer/PTPager.Web3/appsettings.local.json
